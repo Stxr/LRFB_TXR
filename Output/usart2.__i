@@ -1,0 +1,5 @@
+-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\..\Libraries\CMSIS -I..\..\User -I..\..\Libraries\FWlib\inc -I..\..\SYSTEM\delay -I..\..\SYSTEM\sys -I..\..\SYSTEM\usart 
+-I D:\Keil\ARM\RV31\INC 
+-I D:\Keil\ARM\CMSIS\Include 
+-I D:\Keil\ARM\Inc\ST\STM32F10x 
+-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -o "..\..\Output\usart2.o" --omf_browse "..\..\Output\usart2.crf" --depend "..\..\Output\usart2.d" "..\..\User\usart2.c"
