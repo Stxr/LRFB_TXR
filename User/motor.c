@@ -23,7 +23,7 @@ void Motor_InitConfig(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 //IO口速度为50MHz
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 	//TIM3
-	TIM_TimeBaseStruction.TIM_Period=1000-1; //定时器从0计数到999，为一个定时周期
+	TIM_TimeBaseStruction.TIM_Period=900-1; //定时器从0计数到999，为一个定时周期
 	TIM_TimeBaseStruction.TIM_Prescaler=0;   //设置预分频：不分频  72MHz
 	TIM_TimeBaseStruction.TIM_ClockDivision=0;  //设置时钟分频：不分频
 	TIM_TimeBaseStruction.TIM_CounterMode=TIM_CounterMode_Up;  //向上计数模式

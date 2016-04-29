@@ -1,5 +1,0 @@
--c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I..\..\Libraries\CMSIS -I..\..\User -I..\..\Libraries\FWlib\inc -I..\..\SYSTEM\delay -I..\..\SYSTEM\sys -I..\..\SYSTEM\usart --c99 
--I D:\Keil\ARM\RV31\INC 
--I D:\Keil\ARM\CMSIS\Include 
--I D:\Keil\ARM\Inc\ST\STM32F10x 
--DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -o "..\..\Output\motor.o" --omf_browse "..\..\Output\motor.crf" --depend "..\..\Output\motor.d" "..\..\User\motor.c"

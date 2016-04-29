@@ -1,4 +1,5 @@
 #include <stdio.h>
 #include "stm32f10x.h"
-int match(char *a,char *b); //匹配函数两个值相同返回1，否则返回0
-void clear(u16 a[]);//清除数组里的值
+#include "delay.h" 
+u8 Check_pe2(void);//消抖检测按键PE2
+u8 Check_pe3(void);//消抖检测按键PE3

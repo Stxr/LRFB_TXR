@@ -18,7 +18,7 @@ void EXTI_PE2_Config(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;	 // 下拉输入
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 	/* EXTI line mode config */
-	GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource0);
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource2);
 	EXTI_InitStructure.EXTI_Line = EXTI_Line2;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;   //中断模式
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
@@ -30,7 +30,7 @@ void EXTI_PE2_Config(void)
 	/* 配置中断源 */
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;  //抢占优先级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;   //子优先级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;   //子优先级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 
@@ -50,7 +50,7 @@ void EXTI_PE3_Config(void)
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 
 	/* EXTI line mode config */
-	GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource1);
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource3);
 	EXTI_InitStructure.EXTI_Line = EXTI_Line3;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;    //中断模式
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿中断
@@ -62,7 +62,7 @@ void EXTI_PE3_Config(void)
 	/* 配置中断源 */
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI3_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;  //抢占优先级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;   //子优先级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;   //子优先级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
@@ -80,7 +80,7 @@ void EXTI_PE4_Config(void)
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 
 	/* EXTI line mode config */
-	GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource2);
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource4);
 	EXTI_InitStructure.EXTI_Line = EXTI_Line4;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //上升沿中断
