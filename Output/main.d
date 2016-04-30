@@ -36,3 +36,6 @@
 ..\..\output\main.o: ..\..\User\tool.h
 ..\..\output\main.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 ..\..\output\main.o: ..\..\User\uart5.h
+..\..\output\main.o: ..\..\User\usart_test.h
+..\..\output\main.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
+..\..\output\main.o: ..\..\User\tim.h
