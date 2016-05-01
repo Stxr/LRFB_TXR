@@ -29,7 +29,7 @@ void EXTI_PE2_Config(void)
 
 	/* 配置中断源 */
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级2
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;   //子优先级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -61,7 +61,7 @@ void EXTI_PE3_Config(void)
 
 	/* 配置中断源 */
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级2
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;   //子优先级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -91,8 +91,8 @@ void EXTI_PE4_Config(void)
 
 	/* 配置中断源 */
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级1
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;   //子优先级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级2
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;   //子优先级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
@@ -122,7 +122,7 @@ void EXTI_PE5_Config(void)
 	/* 配置中断源 */
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  //抢占优先级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;   //子优先级
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;   //子优先级
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
