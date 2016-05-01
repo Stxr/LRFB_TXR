@@ -10,13 +10,13 @@
           move(int a,int b); 控制电机 左:a 右:b 速度为（-900——900）
           chess(void); 推棋子程序
           Get_Adc_Average(u8 ch,u32 times); 红外检测程序 ch：通道 times：采样次数
-					printf();向USART1输出测试值
+					printf();向USART1输出测试值，向外接一个无线蓝牙模块，就可以实时检测到机器的运行状态
 	中断优先级说明：
 					中断		抢断优先级    子优先级
 					PE2：			2 						0
 					PE3：			2							0
-					PE4：			2							1
-					PE5：			2							1
+					PE4：			2							0
+					PE5：			2							0
 					TIM2：		1							2
 
 */
@@ -42,8 +42,10 @@ int main(void)
 	ADC_InitConfig(); //ADC初始化
 	uart5_init(1000000);				//与舵机通信
 	TIM2_Init();
+	USART_Config();
 	//软启动
 	move(0,0);
+	printf("ready\n");
 	while(Get_Adc_Average(13,1)<30);
 
 	// 上台程序
@@ -57,7 +59,8 @@ int main(void)
 	while(1)
 	{
 		walk();//推棋子程序
-		hand();
+	//	hand();
+//		printf("%d\n",Get_Adc_Average(10,1));
 	}
 	return 0;
 }
@@ -68,10 +71,11 @@ void EXTI2_IRQHandler(void)
 	delay_ms(10);//消抖
 	if(Check_pe2()) //这个很重要
 	{
-		if((EXTI_GetITStatus(EXTI_Line2)!=RESET))
+		printf("exti2 in\n");
+		if(EXTI_GetITStatus(EXTI_Line2)!=RESET)
 		{
 			unsigned int con=0,value;
-			if(!flag_fuc)//0:对抗 1:推棋子
+			if(flag_fuc)//0:对抗 1:推棋子
 			{
 					//棋子对齐程序
 					while(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_3)==0)    //pe3 右前
@@ -97,19 +101,21 @@ void EXTI2_IRQHandler(void)
 			move(-300,400);
 			delay_ms(300);
 			delay_ms(350);
+			EXTI_ClearITPendingBit(EXTI_Line3|EXTI_Line2);
 		}
 	}
-	EXTI_ClearITPendingBit(EXTI_Line3|EXTI_Line2);
+	printf("exti2 out\n");
 }
 void EXTI3_IRQHandler(void)
 {
 	delay_ms(10);//消抖
 	if(Check_pe3())//这个很重要
 	{
-		if((EXTI_GetITStatus(EXTI_Line3)!=RESET))
+		printf("exti3 in\n");
+		if(EXTI_GetITStatus(EXTI_Line3)!=RESET)
 		{
 			unsigned int con=0;
-			if(!flag_fuc)//0:对抗 1:推棋子
+			if(flag_fuc)//0:对抗 1:推棋子
 			{
 					//棋子对齐程序
 					while(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_2)==0)    //pe2 左前
@@ -126,21 +132,24 @@ void EXTI3_IRQHandler(void)
 			move(-400,-400);
 			for (int i=0; i<40; i++)
 				delay_ms(10);
-			move(-300,400);
+			move(400,-300);
 			delay_ms(300);
 			delay_ms(350);
+			EXTI_ClearITPendingBit(EXTI_Line3|EXTI_Line2);
 		}
 	}
-	EXTI_ClearITPendingBit(EXTI_Line3|EXTI_Line2);
+	printf("exti3 out\n");
 }
 void EXTI4_IRQHandler(void) //中间中断
 {
-	if(EXTI_GetITStatus(EXTI_Line4!=RESET))
+	if(EXTI_GetITStatus(EXTI_Line4)!=RESET)
 	{
+		printf("exti4 in\n");
 		if(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_4)==RESET)
 		{
 			TIM2_Set(1);
 			flag_pe4=0;
+			printf("pe4=0\n");
 		}
 		else if(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_4)!=RESET && flag_pe4==1)
 		{
@@ -148,12 +157,21 @@ void EXTI4_IRQHandler(void) //中间中断
 			move(-400,-400);
 			for (int i=0; i<40; i++)
 				delay_ms(10);
-			move(-300,400);
+			move(0,0);
 			delay_ms(300);
 			delay_ms(350);
+			printf("flag_pe4\n");
+		}
+		else if (GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_4)!=RESET)
+		{
+			TIM_SetCounter(TIM2,0);
+			TIM2_Set(0);
+			printf("tim2=0\n");
+			flag_pe4=0;
 		}
 		EXTI_ClearITPendingBit(EXTI_Line4);
 	}
+	printf("exti4 out\n");
 }
 
 //测速中断
@@ -171,10 +189,12 @@ void TIM2_IRQHandler(void)
 {
   if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)//是更新中断
 	{
+		printf("tim2 in\n");
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 		TIM2_Set(0);
 		flag_pe4=1;
 	}
+		printf("tim2 out\n");
 }
 void USART1_IRQHandler(void)
 {
@@ -226,6 +246,7 @@ void walk()
 // 		while(((Get_Adc_Average(10,3)>1600)&&(Get_Adc_Average(11,3)>1900))&&(s<=100000));
 // 	}
 	else  move(400,400); 					//寻敌
+	printf("walk\n");
 }
 /************************************手臂***********************************/
 void hand(void)
