@@ -35,6 +35,7 @@
 "..\..\output\tool.o"
 "..\..\output\usart_test.o"
 "..\..\output\uart5.o"
+"..\..\output\jushou.o"
 "..\..\output\delay.o"
 "..\..\output\sys.o"
 --library_type=microlib --strict --scatter "..\..\Output\LRFB_txr.sct"

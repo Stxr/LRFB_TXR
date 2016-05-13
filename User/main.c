@@ -17,7 +17,7 @@
 					PE3：			2							0
 					PE4：			2							0
 					PE5：			2							0
-					TIM2：		1							2
+					TIM2：			1							2
 
 */
 #include "stm32f10x.h" //stm32官方头文件
@@ -29,20 +29,26 @@
 #include "uart5.h"
 #include "usart_test.h"//USART1测试程序
 #include "tim.h"  //TIM2配置
+#include "jushou.h"
 void walk(void);
 void hand(void);
 int flag_pe4=-1;//flag_pe4=1 可以进入上升沿中断标志位 flag_pe4=0 进入下降沿标志位
 int flag_fuc=-1;//flag_fuc=1 推棋子 flag_fuc=0 对抗
+int flag_hand=0;
+int flag_select=-1;//flag_select=0 为两脚分开 flag_select=1为两脚并拢
 /**************************************主函数****************************************/
 int main(void)
 {
 	flag_fuc=0;//0:对抗 1:推棋子
+	flag_select=0;
 	delay_init();  //延时函数初始化
 	Motor_InitConfig();  //电机初始化
 	ADC_InitConfig(); //ADC初始化
 	uart5_init(1000000);				//与舵机通信
 	TIM2_Init();
+	TIM4_Init();
 	USART_Config();
+
 	//软启动
 	move(0,0);
 	printf("ready\n");
@@ -53,14 +59,20 @@ int main(void)
 	delay_ms(1000);
 	move(300,600);
 	delay_ms(500);
-
 	EXTI_InitConfig();//中断初始化(开中断)
+	TIM4_Set(1);
 
 	while(1)
 	{
-		walk();//推棋子程序
-	//	hand();
-//		printf("%d\n",Get_Adc_Average(10,1));
+	//	move(400,-400);
+		hand();
+		walk(); //推棋子程序
+		// printf("10:%d\n",Get_Adc_Average(10,3));
+		// printf("12:%d\n",Get_Adc_Average(12,3));
+		// printf("13:%d\n",Get_Adc_Average(13,3));
+		// delay_ms(2000);
+		// delay_ms(2000);
+		// delay_ms(2000);
 	}
 	return 0;
 }
@@ -98,7 +110,7 @@ void EXTI2_IRQHandler(void)
 			move(-400,-400);
 			for (int i=0; i<40; i++)
 				delay_ms(10);
-			move(-300,400);
+			move(400,-300);
 			delay_ms(300);
 			delay_ms(350);
 			EXTI_ClearITPendingBit(EXTI_Line3|EXTI_Line2);
@@ -182,9 +194,16 @@ void EXTI9_5_IRQHandler(void)
 //定时器4中断服务程序
 void TIM4_IRQHandler(void)
 {
-
+	if(TIM_GetITStatus(TIM4,TIM_IT_Update)!=RESET)
+	{
+	//	printf("tim4 in\n");
+		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+		 TIM_SetCounter(TIM4,0);
+		flag_hand=~flag_hand;
+	}
+//	printf("tim4 out\n");
 }
-//定时器3中断服务程序
+//定时器2中断服务程序
 void TIM2_IRQHandler(void)
 {
   if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)//是更新中断
@@ -246,33 +265,39 @@ void walk()
 // 		while(((Get_Adc_Average(10,3)>1600)&&(Get_Adc_Average(11,3)>1900))&&(s<=100000));
 // 	}
 	else  move(400,400); 					//寻敌
-	printf("walk\n");
+//	printf("walk\n");
 }
 /************************************手臂***********************************/
 void hand(void)
 {
-	SetServoPosition(2,600,200);
-	delay_ms(500);
-	SetServoPosition(1,761,200);
-	delay_ms(1000);
-	SetServoPosition(1,761,200);
-	SetServoPosition(2,355,200);
-	SetServoPosition(3,622,200);
-	delay_ms(1000);
-	SetServoPosition(1,761,200);
-	SetServoPosition(2,628,200);
-	SetServoPosition(3,424,200);
-	delay_ms(1000);
-	SetServoPosition(1,761,200);
-	SetServoPosition(2,355,200);
-	SetServoPosition(3,622,200);
-	delay_ms(1000);
-	SetServoPosition(1,761,200);
-	SetServoPosition(2,628,200);
-	SetServoPosition(3,424,200);
-	delay_ms(1000);
-	SetServoPosition(1,512,200);
-	delay_ms(500);
+	if(flag_select==0)
+	{
+		SetServoPosition(1,756,200);
+		SetServoPosition(4,756,200);
+		if(flag_hand)
+		{
+			start();
+		}
+		else
+		{
+			end();
+//			printf("%d\n",flag_hand);
+		}
+	}
+	else if (flag_select==1)
+	{
+		SetServoPosition(3,201,200);
+		SetServoPosition(6,221,200);
+		if(flag_hand)
+		{
+			start1();
+		}
+		else
+		{
+			end1();
+//			printf("%d\n",flag_hand);
+		}
+	}
 }
 
 /**************************END OF FILE*************************/

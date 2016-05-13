@@ -39,3 +39,4 @@
 ..\..\output\main.o: ..\..\User\usart_test.h
 ..\..\output\main.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
 ..\..\output\main.o: ..\..\User\tim.h
+..\..\output\main.o: ..\..\User\jushou.h
